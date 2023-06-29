@@ -10,12 +10,6 @@ import dalleRoutes from './routes/dalleRoutes.js'
 dotenv.config();
 
 const app = express();
-if (process.env.NODE_ENV === 'production') {
-  //*Set static folder up in production
-  app.use(express.static('client/dist'));
-
-  app.get('*', (req,res) => res.sendFile(path.resolve(__dirname, 'client', 'dist','index.html')));
-}
 app.use(cors({ credentials: true, origin: true }));
 app.use(express.json({limit:'50mb'}))
 app.use(bodyParser.urlencoded({ extended: true,limit:'50mb' }));
