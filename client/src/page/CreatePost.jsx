@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { preview } from '../assets';
 import { getRandomPrompt } from '../utils';
 import { FormField, Loader } from '../components';
-
+import axios from "axios"
 const CreatePost = () => {
   const navigate = useNavigate();
 
@@ -28,17 +28,16 @@ const CreatePost = () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch('https://dalle-arbb.onrender.com/api/v1/dalle', {
-          method: 'POST',
+        const response = await axios.post('http://127.0.0.1:8080/api/v1/dalle', {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
+          body: {
             prompt: form.prompt,
-          }),
+          },
         });
 
-        const data = await response.json();
+        const data = await response.data
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
       } catch (err) {
         alert(err);
@@ -56,15 +55,15 @@ const CreatePost = () => {
     if (form.prompt && form.photo) {
       setLoading(true);
       try {
-        const response = await fetch('https://dalle-arbb.onrender.com/api/v1/post', {
+        const response = await axios.post('http://127.0.0.1:8080/api/v1/post', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...form }),
+          body: { ...form }
         });
 
-        await response.json();
+        console.log(response.data);
         alert('Success');
         navigate('/');
       } catch (err) {

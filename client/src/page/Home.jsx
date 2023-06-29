@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Card, FormField, Loader } from '../components';
+import axios from "axios"
 
 const RenderCards = ({ data, title }) => {
   if (data?.length > 0) {
@@ -24,20 +25,18 @@ const Home = () => {
 
   const fetchPosts = async () => {
     setLoading(true);
-
     try {
-      const response = await fetch('https://dalle-arbb.onrender.com/api/v1/post', {
-        method: 'GET',
+      const response = await axios.get('http://127.0.0.1:8080/api/v1/post', {
         headers: {
           'Content-Type': 'application/json',
         },
       });
 
-      if (response.ok) {
-        const result = await response.json();
+      console.log(response)
+        const result = response.data;
         setAllPosts(result.data.reverse());
-      }
     } catch (err) {
+      console.log(err)
       alert(err);
     } finally {
       setLoading(false);
